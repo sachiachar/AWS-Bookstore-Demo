@@ -6,7 +6,6 @@ terraform {
       # version = "..."
     }
   }
-  backend "s3" {}
 }
 
 provider "linode" {
