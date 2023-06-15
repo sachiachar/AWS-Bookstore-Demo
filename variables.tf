@@ -11,7 +11,7 @@ variable "k8s_version" {
 }
 
 variable "k8s_region" {
-  default       = "ap-southeast"
+  default       = "ap-south"
 }
 
 variable "k8s_tags" {
