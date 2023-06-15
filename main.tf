@@ -6,6 +6,13 @@ terraform {
       # version = "..."
     }
   }
+  backend "remote" {
+    organization = "bookstore"
+
+    workspaces {
+      name = "AWS-Bookstore-Demo2"
+    }
+  }
 }
 
 provider "linode" {
