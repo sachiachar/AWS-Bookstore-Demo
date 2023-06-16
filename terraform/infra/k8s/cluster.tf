@@ -17,18 +17,18 @@ resource "local_file" "k8s_config" {
 }
 
 output "host" {
-    value = "${nonsensitive(base64decode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.server)}"
+    value = "${yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.server}"
 }
 
 output "client_certificate" {
-    value = "${nonsensitive(base64decode(linode_lke_cluster.bookstore-operations.kubeconfig).users.0.user.client-certificate-data)}"
+    value = "${base64decode(yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).users.0.user.client-certificate-data)}"
 }
 
 output "client_key" {
-    value = "${nonsensitive(base64decode(linode_lke_cluster.bookstore-operations.kubeconfig).users.0.user.client-key-data)}"
+    value = "${base64decode(yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).users.0.user.client-key-data)}"
 }
 
 output "cluster_ca_certificate" {
-    value = "${nonsensitive(base64decode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.certificate-authority-data)}"
+    value = "${base64decode(yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.certificate-authority-data)}"
 }
 
