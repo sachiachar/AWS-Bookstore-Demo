@@ -27,13 +27,14 @@ data "terraform_remote_state" "k8s_config" {
 
 locals {
   stack_out = data.terraform_remote_state.k8s_config.outputs
-  kubeconf = local.stack_out.kubeconf
+  server = local.stack_out.host
+  ca_cert = local.stack_out.cluster_ca_certificate
 }
 
 provider "helm" {
   kubernetes {
-    host = local.kubeconf.host
-    cluster_ca_certificate = local.kubeconf.cluster_ca_certificate
+    host = local.server
+    cluster_ca_certificate = local.ca_cert
   }
 }
 
