@@ -24,9 +24,13 @@ data "terraform_remote_state" "Linode-Bookstore-Demo-K8S-Ops" {
     }
 }
 
+output "kubeconf" {
+    value = data.terraform_remote_state.kubeconf
+}
+
 provider "helm" {
   kubernetes {
-    config_path = data.terraform_remote_state.k8s_config_file    
+    config_path = data.terraform_remote_state.kubeconf    
   }
 }
 
