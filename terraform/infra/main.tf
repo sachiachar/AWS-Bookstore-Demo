@@ -19,12 +19,11 @@ provider "linode" {
   token = var.linode_api_token
 }
 
-#provider "helm" {
-#  kubernetes {
-#    config_path = "~/.kube/config"
-#    
-#  }
-#}
+provider "helm" {
+  kubernetes {
+    config_path = local.k8s_config_file    
+  }
+}
 
 
 
