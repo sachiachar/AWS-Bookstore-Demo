@@ -29,18 +29,4 @@ variable "k8s_node_type" {
 }
 
 
-variable "argo_namespace" {
-  default = "argocd"
-}
 
-variable "helm_repository" {
-  default = "https://argoproj.github.io/argo-helm"
-}
-
-variable "chartname" {
-  default = "argo-cd"
-}
-
-variable "chart_version" {
-  default = "3.35.4"
-}

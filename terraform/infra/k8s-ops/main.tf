@@ -30,14 +30,30 @@ provider "helm" {
   }
 }
 
+variable "argo_namespace" {
+  default = "argocd"
+}
+
+variable "helm_repository" {
+  default = "https://argoproj.github.io/argo-helm"
+}
+
+variable "chartname" {
+  default = "argo-cd"
+}
+
+variable "chart_version" {
+  default = "3.35.4"
+}
+
 resource "helm_release" "argocd" {
   
     name = "argocd"
-    repository = var.repository
-    chart = var.repository
-    namespace = var.namespace
+    repository = "${var.repository}"
+    chart = "${var.repository}"
+    namespace = "${var.namespace}"
     create_namespace = true
-    version = var.chart_version
+    version = "${var.chart_version}"
 
     values = [file("argocd.yaml")]
 }
