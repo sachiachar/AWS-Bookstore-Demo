@@ -7,7 +7,7 @@ terraform {
   }
   backend "remote" {
     organization = "bookstore"
-    workspaces {
+    workspaces = {
       name = "Linode-Bookstore-Demo-ArgoCD"
     }
   }
@@ -18,7 +18,7 @@ data "terraform_remote_state" "Linode-Bookstore-Demo-K8S-Ops" {
 
     config = {
         organization = "bookstore"
-        workspaces {
+        workspaces = {
             name = "Linode-Bookstore-Demo-K8S-Ops"
         }
     }
@@ -27,8 +27,6 @@ data "terraform_remote_state" "Linode-Bookstore-Demo-K8S-Ops" {
 output "remote_state" {
     value = data.terraform_remote_state.k8s_config_file
 }
-
-
 
 provider "helm" {
   kubernetes {

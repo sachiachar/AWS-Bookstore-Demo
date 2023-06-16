@@ -9,8 +9,8 @@ terraform {
   backend "remote" {
     organization = "bookstore"
 
-    workspaces {
-      name = "AWS-Bookstore-Demo2"
+    workspaces = {
+      name = "Linode-Bookstore-Demo-K8S-Ops"
     }
   }
 }
