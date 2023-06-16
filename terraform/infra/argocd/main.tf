@@ -33,6 +33,7 @@ locals {
 
 provider "helm" {
   kubernetes {
+    version = "v1"
     host = local.server
     cluster_ca_certificate = local.ca_cert
   }
