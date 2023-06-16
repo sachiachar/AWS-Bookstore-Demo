@@ -21,7 +21,7 @@ provider "linode" {
 
 provider "helm" {
   kubernetes {
-    config_path = "${local_file.k8s_config.content}"
+    config_path = "~/.kube/config"
     
   }
 }
