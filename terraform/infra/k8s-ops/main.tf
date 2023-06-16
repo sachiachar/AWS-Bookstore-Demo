@@ -25,8 +25,8 @@ provider "linode" {
 
 provider "helm" {
   kubernetes {
-    host = "${local.server}"
-    cluster_ca_certificate = "${local.ca_cert}"
+    host = "${yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.server}"
+    cluster_ca_certificate = "${base64decode(yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.certificate-authority-data)}"
   }
 }
 

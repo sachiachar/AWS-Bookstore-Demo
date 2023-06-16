@@ -16,13 +16,9 @@ resource "local_file" "k8s_config" {
     file_permission = "0600"
 }
 
-locals {
-    kubeconfig = nonsensitive(base64decode(linode_lke_cluster.bookstore-operations.kubeconfig))
-}
-
-output "host" {
-    value = "${yamldecode(local.kubeconfig).clusters.0.cluster.server}"
-}
+# output "host" {
+#     value = "${yamldecode(local.kubeconfig).clusters.0.cluster.server}"
+# }
 
 #output "client_certificate" {
 #    value = "${base64decode(yamldecode(local.kubeconfig).users.0.user.client-certificate-data)}"
@@ -32,7 +28,7 @@ output "host" {
 #    value = "${base64decode(yamldecode(local.kubeconfig).users.0.user.client-key-data)}"
 #}
 
-output "cluster_ca_certificate" {
-    value = "${base64decode(yamldecode(local.kubeconfig).clusters.0.cluster.certificate-authority-data)}"
-}
+# output "cluster_ca_certificate" {
+#     value = "${base64decode(yamldecode(local.kubeconfig).clusters.0.cluster.certificate-authority-data)}"
+# }
 
