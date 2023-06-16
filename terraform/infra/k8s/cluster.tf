@@ -18,4 +18,5 @@ resource "local_file" "k8s_config" {
 
 output "kubeconf" {
   value = "${nonsensitive(base64decode(linode_lke_cluster.bookstore-operations.kubeconfig))}"
+  sensitive   = true
 }
