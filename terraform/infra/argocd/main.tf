@@ -37,21 +37,6 @@ provider "helm" {
   }
 }
 
-provider "kubernetes" {
-  kubernetes {
-    host = local.kubeconf.host
-    cluster_ca_certificate = local.kubeconf.cluster_ca_certificate
-  }
-}
-
-provider "kubectl" {
-  kubernetes {
-    host = local.kubeconf.host
-    cluster_ca_certificate = local.kubeconf.cluster_ca_certificate
-    load_config_file = false
-  }
-}
-
 resource "helm_release" "argocd" {
     name = "argocd"
 
