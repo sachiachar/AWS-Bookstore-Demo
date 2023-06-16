@@ -6,13 +6,13 @@ terraform {
       # version = "..."
     }
   }
-  backend "remote" {
-    organization = "bookstore"
+   backend "remote" {
+     organization = "bookstore"
 
-    workspaces = {
-      name = "Linode-Bookstore-Demo-K8S-Ops"
-    }
-  }
+     workspaces {
+       name = "Linode-Bookstore-Demo-K8S-Ops"
+     }
+   }
 }
 
 provider "linode" {

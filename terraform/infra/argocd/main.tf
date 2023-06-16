@@ -7,13 +7,14 @@ terraform {
   }
   backend "remote" {
     organization = "bookstore"
-    workspaces = {
+    workspaces  {
       name = "Linode-Bookstore-Demo-ArgoCD"
     }
   }
 }
 
-data "terraform_remote_state" "Linode-Bookstore-Demo-K8S-Ops" {
+data "terraform_remote_state" "k8s_config" {
+
     backend = "remote"
 
     config = {
@@ -24,13 +25,14 @@ data "terraform_remote_state" "Linode-Bookstore-Demo-K8S-Ops" {
     }
 }
 
-output "kubeconf" {
-    value = data.terraform_remote_state.kubeconf
+locals {
+  stack_out = data.terraform_remote_state.k8s_config.outputs
+  kubeconf = local.stack_out.kubeconf
 }
 
 provider "helm" {
   kubernetes {
-    config_path = data.terraform_remote_state.kubeconf    
+    config_path = local.kubeconf 
   }
 }
 
