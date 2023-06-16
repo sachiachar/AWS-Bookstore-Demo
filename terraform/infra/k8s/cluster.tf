@@ -25,7 +25,7 @@ output "client_certificate" {
 }
 
 output "client_key" {
-    value = "${nonsensitive(base64decode(linode_lke_cluster.bookstore-operations.kubeconfig).users.0.user.client-key-data))}"
+    value = "${nonsensitive(base64decode(linode_lke_cluster.bookstore-operations.kubeconfig).users.0.user.client-key-data)}"
 }
 
 output "cluster_ca_certificate" {
