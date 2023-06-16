@@ -32,28 +32,22 @@ locals {
 
 provider "helm" {
   kubernetes {
-    host = local.kubeconf.clusters.0.cluster.server
-    client_certificate = local.kubeconf.users.0.user.client-certificate-data
-    client_key = local.kubeconf.users.0.user.client-key-data
-    cluster_ca_certificate = local.kubeconf.clusters.0.cluster.certificate-authority-data
+    host = local.kubeconf.host
+    cluster_ca_certificate = local.kubeconf.cluster_ca_certificate
   }
 }
 
 provider "kubernetes" {
   kubernetes {
-    host = local.kubeconf.clusters.0.cluster.server
-    client_certificate = local.kubeconf.users.0.user.client-certificate-data
-    client_key = local.kubeconf.users.0.user.client-key-data
-    cluster_ca_certificate = local.kubeconf.clusters.0.cluster.certificate-authority-data
+    host = local.kubeconf.host
+    cluster_ca_certificate = local.kubeconf.cluster_ca_certificate
   }
 }
 
 provider "kubectl" {
   kubernetes {
-    host = local.kubeconf.clusters.0.cluster.server
-    client_certificate = local.kubeconf.users.0.user.client-certificate-data
-    client_key = local.kubeconf.users.0.user.client-key-data
-    cluster_ca_certificate = local.kubeconf.clusters.0.cluster.certificate-authority-data
+    host = local.kubeconf.host
+    cluster_ca_certificate = local.kubeconf.cluster_ca_certificate
     load_config_file = false
   }
 }
