@@ -24,13 +24,13 @@ output "host" {
     value = "${yamldecode(local.kubeconfig).clusters.0.cluster.server}"
 }
 
-output "client_certificate" {
-    value = "${base64decode(yamldecode(local.kubeconfig).users.0.user.client-certificate-data)}"
-}
+#output "client_certificate" {
+#    value = "${base64decode(yamldecode(local.kubeconfig).users.0.user.client-certificate-data)}"
+#}
 
-output "client_key" {
-    value = "${base64decode(yamldecode(local.kubeconfig).users.0.user.client-key-data)}"
-}
+#output "client_key" {
+#    value = "${base64decode(yamldecode(local.kubeconfig).users.0.user.client-key-data)}"
+#}
 
 output "cluster_ca_certificate" {
     value = "${base64decode(yamldecode(local.kubeconfig).clusters.0.cluster.certificate-authority-data)}"
