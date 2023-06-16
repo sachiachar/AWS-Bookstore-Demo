@@ -7,7 +7,7 @@ variable "k8s_label" {
 }
 
 variable "k8s_version" {
-  default       = "1.25"
+  default       = "1.26"
 }
 
 variable "k8s_region" {
@@ -16,7 +16,7 @@ variable "k8s_region" {
 
 variable "k8s_tags" {
   type = list(string)
-  default       = ["terraform-k8s"]
+  default       = ["bookstore-ops-k8s"]
 }
 
 

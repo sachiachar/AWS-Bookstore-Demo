@@ -18,3 +18,14 @@ terraform {
 provider "linode" {
   token = var.linode_api_token
 }
+
+provider "helm" {
+  kubernetes {
+    config_path = "${local_file.k8s_config.content}"
+    
+  }
+}
+
+
+
+
