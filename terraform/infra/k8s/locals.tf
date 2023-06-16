@@ -5,5 +5,5 @@ locals {
 }
 
 output "k8s_config_file" {
-  value = k8s_config_file
+  value = locals.k8s_config_file
 }
