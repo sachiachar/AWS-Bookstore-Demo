@@ -10,9 +10,12 @@ resource "linode_lke_cluster" "bookstore-operations" {
     }
 }
 
+resource "local_file" "k8s_config" {
+    content = "${nonsensitive(base64decode(linode_lke_cluster.bookstore-operations.kubeconfig))}"
+    filename = "${local.k8s_config_file}"
+    file_permission = "0600"
+}
 
-#resource "local_file" "k8s_config" {
-#    content = "${nonsensitive(base64decode(linode_lke_cluster.bookstore-operations.kubeconfig))}"
-#    filename = "${local.k8s_config_file}"
-#    file_permission = "0600"
-#}
+output "kubeconf" {
+  value = local.k8s_config_file
+}
