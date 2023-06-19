@@ -26,10 +26,11 @@ provider "linode" {
 provider "helm" {
   kubernetes {
 
-    #config_path = local.k8s_config_file
-    config_path = yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).filename
-    # host = "${yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.server}"
-    # cluster_ca_certificate = "${base64decode(yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.certificate-authority-data)}"
+    
+    #config_path = yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).filename
+    host = "${yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.server}"
+    cluster_ca_certificate = "${base64decode(yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.certificate-authority-data)}"
+    config_path = local.k8s_config_file
   }
 }
 
