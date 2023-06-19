@@ -30,6 +30,10 @@ provider "helm" {
     # host = "${yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.server}"
     # cluster_ca_certificate = "${base64decode(yamldecode(linode_lke_cluster.bookstore-operations.kubeconfig).clusters.0.cluster.certificate-authority-data)}"
   }
+  depends_on = [
+    linode_lke_cluster.bookstore-operations,
+    local_file.k8s_config
+  ]
 }
 
 # resource "helm_release" "argocd" {
@@ -73,5 +77,10 @@ resource "helm_release" "argocd" {
     name  = "dex.enabled"
     value = var.enable_dex == true ? true : false
   }
+
+  depends_on = [
+    linode_lke_cluster.bookstore-operations,
+    local_file.k8s_config
+  ]
 }
 
