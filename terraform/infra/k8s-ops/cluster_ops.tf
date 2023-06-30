@@ -51,7 +51,6 @@ resource "local_file" "k8s_config_ops" {
 # Output the kubeconfig value and remember to set it to sensitive
 output "k8s_config_file_ops" {
   value = local.k8s_config_file_ops
-  sensitive = true
 }
 
 # Output the context information for the operation cluster
