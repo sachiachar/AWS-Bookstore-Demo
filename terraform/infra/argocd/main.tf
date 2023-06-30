@@ -32,7 +32,6 @@ data "terraform_remote_state" "kubeconfig" {
 
 # Set the kubeconfig path for the Operations cluster.
 provider "kubernetes" {
-#  config_path = "${local.k8s_config_file_ops}"
 
   host = "${yamldecode(data.terraform_remote_state.kubeconfig.outputs.k8s_config_value_ops).clusters[0].cluster.server}"
   cluster_ca_certificate = "${base64decode(yamldecode(data.terraform_remote_state.kubeconfig.outputs.k8s_config_value_ops).clusters[0].cluster.certificate-authority-data)}"
