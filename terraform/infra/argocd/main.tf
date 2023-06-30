@@ -63,6 +63,11 @@ resource "null_resource" "ArgoCD" {
     yaml_sha_install  = "${sha256(file("${var.argo_install_script}"))}"
   }
 
+  # download kubectl
+  provisioner "local-exec" {
+    command = "curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl"
+  }
+
   # Install the ArgoCD YAML file.
   provisioner "local-exec" {
     command = "kubectl apply -n ${kubernetes_namespace.ArgoCD.metadata[0].name} -f ${var.argo_install_script}"
