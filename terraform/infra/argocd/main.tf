@@ -36,7 +36,7 @@ data "terraform_remote_state" "kubeconfig" {
 
 # Create a kubeconfig file locally for operations
 resource "local_file" "k8s_config_ops" {
-  content         = nonsensitive(data.terraform_remote_state.kubeconfig.outputs.k8s_config_value_ops)
+  content         = data.terraform_remote_state.kubeconfig.outputs.k8s_config_value_ops
   filename        = local.k8s_config_file_ops
   file_permission = "0600"
 }
