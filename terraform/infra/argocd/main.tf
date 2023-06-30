@@ -1,54 +1,78 @@
+
+# Declare the providers used
 terraform {
+  required_version = ">= 0.15"
   required_providers {
-    helm = {
-      source = "hashicorp/helm"
-      version = "2.10.1"
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "2.21.1"
     }
   }
-  backend "remote" {
+  cloud {
     organization = "bookstore"
-    workspaces  {
-      name = "Linode-Bookstore-Demo-ArgoCD"
+
+    workspaces {
+      name = "Linode-ArgoCD"
     }
   }
 }
 
-data "terraform_remote_state" "k8s_config" {
+# Read the kubeconfig paths from the kuberbetes workspace. Make sure to use the same org & workspace names.
+data "terraform_remote_state" "kubeconfig" {
+  backend = "remote"
 
-    backend = "remote"
+  config = {
+    #path = "/Users/skarkala/Learning/BookStore/Linode-Bookstore-Demo/terraform/infra/k8s-ops/terraform.tfstate"
+    organization = "bookstore"
 
-    config = {
-        organization = "bookstore"
-        workspaces = {
-            name = "Linode-Bookstore-Demo-K8S-Ops"
-        }
+    workspaces = {
+      name = "Linode-k8s-clusters"
     }
-}
-
-locals {
-  stack_out = data.terraform_remote_state.k8s_config.outputs
-  server = local.stack_out.host
-  ca_cert = local.stack_out.cluster_ca_certificate
-}
-
-provider "helm" {
-  kubernetes {
-    version = "v1"
-    host = local.server
-    cluster_ca_certificate = local.ca_cert
   }
 }
 
-resource "helm_release" "argocd" {
+# Set the kubeconfig path for the Operations cluster.
+provider "kubernetes" {
+  config_path = "${data.terraform_remote_state.kubeconfig.outputs.k8s_config_file_ops}"
+}
+
+# Create a new namespace for ArgoCD.
+resource "kubernetes_namespace" "ArgoCD" {
+  metadata {
     name = "argocd"
-
-    repository = "https://argoproj.github.io/argo-helm"
-    chart = "argo-cd"
-
-    namespace = "argocd"
-
-    create_namespace = true
-    version = "3.35.4"
-
-    values = [file("argocd.yaml")]
+  }
 }
+
+# Template file is required for setting the trigger. This is to apply the new install scripts whenever there is change the install script.
+# You can download the latest file from https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+data "template_file" "argocd_install" {
+  template = "${file("${var.argo_install_script}")}"
+}
+
+# Install the ArgoCD install file.
+resource "null_resource" "ArgoCD" {
+
+  #Trigger when the yaml file changes
+  triggers = {
+    yaml_sha_install  = "${sha256(file("${var.argo_install_script}"))}"
+  }
+
+  # Install the ArgoCD YAML file.
+  provisioner "local-exec" {
+    command = "kubectl apply -n ${kubernetes_namespace.ArgoCD.metadata[0].name} -f ${var.argo_install_script}"
+
+    environment = {
+      KUBECONFIG = "${data.terraform_remote_state.kubeconfig.outputs.k8s_config_file_ops}"
+    }
+  }
+
+  # Create a load balancer for external access
+  provisioner "local-exec" {
+    command = "kubectl patch svc argocd-server -n ${kubernetes_namespace.ArgoCD.metadata[0].name} -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'"
+
+    environment = {
+      KUBECONFIG = "${data.terraform_remote_state.kubeconfig.outputs.k8s_config_file_ops}"
+    }
+  }
+}
+
