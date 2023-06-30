@@ -33,8 +33,14 @@ provider "linode" {
 
 # Merge the kubeconfig files into a single kubeconfig for ease of use. Although this isn't mandatory.
 resource "null_resource" "config" {
+
+  # download kubectl
   provisioner "local-exec" {
-    command = "kubectl config view --flatten >> ${local.k8s_config_file_merged}"
+    command = "curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl"
+  }
+
+  provisioner "local-exec" {
+    command = "./kubectl config view --flatten >> ${local.k8s_config_file_merged}"
     environment = {
       KUBECONFIG = "${local.k8s_config_file_ops}:${local.k8s_config_file_app}"
     }
