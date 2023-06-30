@@ -45,7 +45,7 @@ provider "kubernetes" {
   host = "${yamldecode(data.terraform_remote_state.kubeconfig.outputs.k8s_config_value_ops).clusters[0].cluster.server}"
   cluster_ca_certificate = "${base64decode(yamldecode(data.terraform_remote_state.kubeconfig.outputs.k8s_config_value_ops).clusters[0].cluster.certificate-authority-data)}"
   token = "${yamldecode(data.terraform_remote_state.kubeconfig.outputs.k8s_config_value_ops).users[0].user.token}"
-  config_context_cluster = "${yamldecode(data.terraform_remote_state.kubeconfig.outputs.k8s_config_value_ops).contexts[0].name}"
+  #config_context_cluster = "${yamldecode(data.terraform_remote_state.kubeconfig.outputs.k8s_config_value_ops).contexts[0].name}"
 
 }
 
