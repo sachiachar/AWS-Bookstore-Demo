@@ -48,9 +48,15 @@ resource "local_file" "k8s_config_ops" {
   file_permission = "0600"
 }
 
-# Output the kubeconfig filename. This is required for using the file path in other workspaces.
+# Output the kubeconfig value and remember to set it to sensitive
 output "k8s_config_file_ops" {
   value = local.k8s_config_file_ops
+  sensitive = true
+}
+
+# Output the context information for the operation cluster
+output "k8s_config_value_ops" {
+  value = base64decode(linode_lke_cluster.bookstore-operations.kubeconfig)
 }
 
 # Output the context information for the operation cluster
