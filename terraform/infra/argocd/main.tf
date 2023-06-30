@@ -34,6 +34,13 @@ data "terraform_remote_state" "kubeconfig" {
   }
 }
 
+# Create a kubeconfig file locally for operations
+resource "local_file" "k8s_config_ops" {
+  content         = nonsensitive(data.terraform_remote_state.kubeconfig.outputs.k8s_config_value_ops)
+  filename        = local.k8s_config_file_ops
+  file_permission = "0600"
+}
+
 # Set the kubeconfig path for the Operations cluster.
 provider "kubernetes" {
 
@@ -70,19 +77,19 @@ resource "null_resource" "ArgoCD" {
 
   # Install the ArgoCD YAML file.
   provisioner "local-exec" {
-    command = "kubectl apply -n ${kubernetes_namespace.ArgoCD.metadata[0].name} -f ${var.argo_install_script}"
+    command = "./kubectl apply -n ${kubernetes_namespace.ArgoCD.metadata[0].name} -f ${var.argo_install_script}"
 
     environment = {
-      KUBECONFIG = "${data.terraform_remote_state.kubeconfig.outputs.k8s_config_file_ops}"
+      KUBECONFIG = "${local.k8s_config_file_ops}"
     }
   }
 
   # Create a load balancer for external access
   provisioner "local-exec" {
-    command = "kubectl patch svc argocd-server -n ${kubernetes_namespace.ArgoCD.metadata[0].name} -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'"
+    command = "./kubectl patch svc argocd-server -n ${kubernetes_namespace.ArgoCD.metadata[0].name} -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'"
 
     environment = {
-      KUBECONFIG = "${data.terraform_remote_state.kubeconfig.outputs.k8s_config_file_ops}"
+      KUBECONFIG = "${local.k8s_config_file_ops}"
     }
   }
 }
