@@ -57,6 +57,7 @@ output "k8s_config_file_ops" {
 # Output the context information for the operation cluster
 output "k8s_config_value_ops" {
   value = base64decode(linode_lke_cluster.bookstore-operations.kubeconfig)
+  sensitive = true
 }
 
 # Output the context information for the operation cluster
